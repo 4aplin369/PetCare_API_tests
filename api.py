@@ -27,10 +27,12 @@ def owner_register_with_custom_payload(payload):
     )
     return response
 
+
 @step("Получение списка владельцев")
 def get_owners():
     response = requests.get(d.OWNER_URL)
     return response
+
 
 @step("Удаление владельца")
 def owner_delete(owner_id):
@@ -54,12 +56,20 @@ def owner_change_data_with_custom_payload(owner_id, owner_key, owner_value):
 
 @step("Регистрация питомца")
 def pet_register(age, breed, name, notes, owner_id, species):
-    payload = {"age": age, "breed": breed, "name": name, "notes": notes, "owner_id": owner_id, "species": species}
+    payload = {
+        "age": age,
+        "breed": breed,
+        "name": name,
+        "notes": notes,
+        "owner_id": owner_id,
+        "species": species,
+    }
 
     response = requests.post(
         d.PET_URL, json=payload, headers={"Content-Type": "application/json"}
     )
     return response
+
 
 @step("Регистрация питомца")
 def pet_register_with_custom_payload(payload):
@@ -68,12 +78,35 @@ def pet_register_with_custom_payload(payload):
     )
     return response
 
+
 @step("Удаление питомца")
 def pet_delete(pet_id):
     response = requests.delete(
         f"{d.PET_URL}/{pet_id}", headers={"Content-Type": "application/json"}
     )
 
+    assert response.status_code == 200
+
+
+@step("Получение списка питомцев")
+def get_pets():
+    response = requests.get(d.PET_URL)
+    return response
+
+    assert response.status_code == 200
+
+
+@step("Получение списка питомцев С сортировкой по типу питомца")
+def get_pets_species_sorting(species):
+    response = requests.get(f"{d.PET_URL}?species={species}")
+    return response
+    assert response.status_code == 200
+
+
+@step("Получение списка питомцев С сортировкой по слову")
+def get_pets_search_sorting(word):
+    response = requests.get(f"{d.PET_URL}?search={word}")
+    return response
     assert response.status_code == 200
 
 

@@ -42,7 +42,6 @@ class TestOwnerChangeData:
 
         h.get_id_and_delete_owner(r_for_delete)
 
-
     @allure.epic("PetCare")
     @allure.feature("Администрирование владельцев")
     @allure.story("Изменение владельца")
@@ -77,7 +76,7 @@ class TestOwnerChangeData:
         if change_key == name:
             with allure.step(d.ALLURE_RESULT_CORRECT_TEXT):
                 assert d.OWNER_CREATE_EMPTY_EMAIL_OR_NAME_TEXT in r.text
-        
+
         with allure.step(d.ALLURE_RESULT_CORRECT_CODE):
             assert r.status_code == 422
         h.get_id_and_delete_owner(r_for_delete)
@@ -88,7 +87,9 @@ class TestOwnerChangeData:
     @allure.title("Изменение данных валидация не пройдена")
     def test_owner_change_validation_error(self):
         r = api.owner_change_data_with_custom_payload(
-            owner_id=h.generate_random_string(2), owner_key=h.generate_random_string(5), owner_value=h.generate_random_string(5)
+            owner_id=h.generate_random_string(2),
+            owner_key=h.generate_random_string(5),
+            owner_value=h.generate_random_string(5),
         )
         with allure.step(d.ALLURE_RESULT_CORRECT_CODE):
             assert r.status_code == 422
@@ -101,7 +102,9 @@ class TestOwnerChangeData:
     @allure.title("Изменение данных владелец не найден")
     def test_owner_change_id_not_found(self):
         r = api.owner_change_data_with_custom_payload(
-            owner_id=h.generate_random_id(), owner_key="email", owner_value=h.get_fake_email()
+            owner_id=h.generate_random_id(),
+            owner_key="email",
+            owner_value=h.get_fake_email(),
         )
         with allure.step(d.ALLURE_RESULT_CORRECT_CODE):
             assert r.status_code == 404

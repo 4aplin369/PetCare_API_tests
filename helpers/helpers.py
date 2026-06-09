@@ -38,14 +38,17 @@ def get_owner_register_data():
 def get_id_and_delete_owner(response):
     r_json = response.json()
     owner_id = r_json["id"]
-    r = api.owner_delete(owner_id)
+    api.owner_delete(owner_id)
+
 
 def get_id_owner(response):
     r_json = response.json()
     return r_json["id"]
 
+
 def generate_random_id():
     return random.randint(500, 1500)
+
 
 def get_pet_register_data(owner_id):
     age = random.randint(0, 12)
@@ -56,10 +59,12 @@ def get_pet_register_data(owner_id):
     species = random.choice(["cat", "dog", "rabbit"])
     return age, breed, name, notes, owner_id, species
 
+
 def get_id_and_delete_pet(response):
     r_json = response.json()
     pet_id = r_json["id"]
-    r = api.pet_delete(pet_id)
+    api.pet_delete(pet_id)
+
 
 def delete_many_owners(self):
     while True:
@@ -71,28 +76,3 @@ def delete_many_owners(self):
 
         owner_id = owners[-1]["id"]
         api.owner_delete(owner_id)
-
-
-# def get_random_bun_id():
-#     r = api.get_ingredients()
-#     buns = []
-#     ingredients = r.json()["data"]
-
-#     for ing in ingredients:
-#         if ing["type"] == "bun":
-#             buns.append(ing)
-
-#     random_bun = random.choice(buns)
-
-#     return random_bun["_id"]
-
-
-# def get_random_ingredients():
-#     payload = {
-#         "ingredients": [
-#             f"{get_random_bun_id()}",
-#             f"{get_random_sauce_id()}",
-#             f"{get_random_main_id()}",
-#         ]
-#     }
-#     return payload

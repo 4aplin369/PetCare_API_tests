@@ -17,7 +17,9 @@ class TestPetRegister:
         owner_name, email, phone = h.get_owner_register_data()
         r = api.owner_register(owner_name, email, phone)
 
-        age, breed, name, notes, owner_id, species = h.get_pet_register_data(owner_id=h.get_id_owner(r))
+        age, breed, name, notes, owner_id, species = h.get_pet_register_data(
+            owner_id=h.get_id_owner(r)
+        )
         pet_r = api.pet_register(age, breed, name, notes, owner_id, species)
 
         with allure.step(d.ALLURE_RESULT_CORRECT_CODE):
@@ -25,10 +27,9 @@ class TestPetRegister:
 
         with allure.step(d.ALLURE_RESULT_CORRECT_TEXT):
             assert d.OWNER_CREATE_RESPONSE_TEXT in pet_r.text
-        
+
         h.get_id_and_delete_pet(pet_r)
         h.get_id_and_delete_owner(r)
-        
 
     @allure.epic("PetCare")
     @allure.feature("Администрирование питомцев")
@@ -38,7 +39,9 @@ class TestPetRegister:
         owner_name, email, phone = h.get_owner_register_data()
         r = api.owner_register(owner_name, email, phone)
 
-        age, breed, name, notes, owner_id, species = h.get_pet_register_data(owner_id=h.get_id_owner(r))
+        age, breed, name, notes, owner_id, species = h.get_pet_register_data(
+            owner_id=h.get_id_owner(r)
+        )
         pet_r = api.pet_register(age, breed, name, notes, owner_id, species)
         pet_r_double = api.pet_register(age, breed, name, notes, owner_id, species)
 
@@ -47,10 +50,9 @@ class TestPetRegister:
 
         with allure.step(d.ALLURE_RESULT_CORRECT_TEXT):
             assert d.PET_ALREADY_EXIST_TEXT in pet_r_double.text
-        
+
         h.get_id_and_delete_pet(pet_r)
         h.get_id_and_delete_owner(r)
-
 
     @allure.epic("PetCare")
     @allure.feature("Администрирование питомцев")
@@ -75,15 +77,31 @@ class TestPetRegister:
     @pytest.mark.parametrize(
         "no_data",
         ["age", "breed", "name", "notes", "owner_id", "species"],
-        ids=["without_age", "without_breed", "without_name", "without_notes", "without_owner_id", "without species"],
+        ids=[
+            "without_age",
+            "without_breed",
+            "without_name",
+            "without_notes",
+            "without_owner_id",
+            "without species",
+        ],
     )
     def test_pet_register_no_data(self, no_data):
         owner_name, email, phone = h.get_owner_register_data()
         r = api.owner_register(owner_name, email, phone)
 
-        age, breed, name, notes, owner_id, species = h.get_pet_register_data(owner_id=h.get_id_owner(r))
-        
-        payload = {"age": age, "breed": breed, "name": name, "notes": notes, "owner_id": owner_id, "species": species}
+        age, breed, name, notes, owner_id, species = h.get_pet_register_data(
+            owner_id=h.get_id_owner(r)
+        )
+
+        payload = {
+            "age": age,
+            "breed": breed,
+            "name": name,
+            "notes": notes,
+            "owner_id": owner_id,
+            "species": species,
+        }
         payload.pop(no_data)
         pet_r = api.pet_register_with_custom_payload(payload=payload)
 
@@ -105,7 +123,6 @@ class TestPetRegister:
 
         h.get_id_and_delete_owner(r)
 
-
     @allure.epic("PetCare")
     @allure.feature("Администрирование питомцев")
     @allure.story("Создание питомца")
@@ -113,15 +130,31 @@ class TestPetRegister:
     @pytest.mark.parametrize(
         "empty_data",
         ["age", "breed", "name", "notes", "owner_id", "species"],
-        ids=["empty_age", "empty_breed", "empty_name", "empty_notes", "empty_owner_id", "empty species"],
+        ids=[
+            "empty_age",
+            "empty_breed",
+            "empty_name",
+            "empty_notes",
+            "empty_owner_id",
+            "empty species",
+        ],
     )
     def test_pet_register_empty_data(self, empty_data):
         owner_name, email, phone = h.get_owner_register_data()
         r = api.owner_register(owner_name, email, phone)
 
-        age, breed, name, notes, owner_id, species = h.get_pet_register_data(owner_id=h.get_id_owner(r))
-        
-        payload = {"age": age, "breed": breed, "name": name, "notes": notes, "owner_id": owner_id, "species": species}
+        age, breed, name, notes, owner_id, species = h.get_pet_register_data(
+            owner_id=h.get_id_owner(r)
+        )
+
+        payload = {
+            "age": age,
+            "breed": breed,
+            "name": name,
+            "notes": notes,
+            "owner_id": owner_id,
+            "species": species,
+        }
         payload[empty_data] = ""
         pet_r = api.pet_register_with_custom_payload(payload=payload)
 
@@ -133,7 +166,7 @@ class TestPetRegister:
                 assert d.OWNER_CREATE_RESPONSE_TEXT in pet_r.text
 
             h.get_id_and_delete_pet(pet_r)
-  
+
         elif empty_data in ("species", "breed", "name"):
             with allure.step(d.ALLURE_RESULT_CORRECT_CODE):
                 assert pet_r.status_code == 422
@@ -149,10 +182,3 @@ class TestPetRegister:
                 assert d.PET_NO_AGE_TEXT in pet_r.text
 
         h.get_id_and_delete_owner(r)
-
-
-
-        
-
-
-
