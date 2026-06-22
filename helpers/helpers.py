@@ -3,6 +3,7 @@ import string
 import api
 
 from faker import Faker
+from datetime import datetime, timedelta, timezone
 
 fake = Faker()
 
@@ -76,3 +77,13 @@ def delete_many_owners(self):
 
         owner_id = owners[-1]["id"]
         api.owner_delete(owner_id)
+
+
+def generate_starts_at():
+    starts_at = (
+        (datetime.now(timezone.utc) + timedelta(days=1))
+        .replace(hour=random.randint(8, 22), minute=0, second=0, microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
+    return starts_at

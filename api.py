@@ -110,12 +110,44 @@ def get_pets_search_sorting(word):
     assert response.status_code == 200
 
 
-# @step("Логин")
-# def login_user(email, password):
-#     payload = {"email": email, "password": password}
-#     response = requests.post(
-#         d.LOGIN_URL,
-#         json=payload,
-#         headers={"Content-Type": "application/json"},
-#     )
-#     return response
+@step("Создание записи на прием")
+def add_appoinment(pet_id, reason, starts_at, vet_id):
+    payload = {
+        "pet_id": pet_id,
+        "reason": reason,
+        "starts_at": starts_at,
+        "vet_id": vet_id,
+    }
+    response = requests.post(
+        d.APPOINMENT_URL, json=payload, headers={"Content-Type": "application/json"}
+    )
+    return response
+
+
+@step("Отмена записи к врачу")
+def appoinment_delete(appoinment_id):
+    response = requests.delete(
+        f"{d.APPOINMENT_URL}/{appoinment_id}",
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 200
+
+
+@step("Удаление записи для очистки тестовых данных")
+def appoinment_hard_delete(appoinment_id):
+    response = requests.delete(
+        f"{d.APPOINMENT_DEV_URL}/{appoinment_id}",
+        headers={"Content-Type": "application/json"},
+    )
+    assert response.status_code == 200
+    return response
+
+@step("Добавление записи")
+def add_appoinment_with_custom_payload(payload):
+    response = requests.post(
+        d.APPOINTMENT_URL,
+        json=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    return response
